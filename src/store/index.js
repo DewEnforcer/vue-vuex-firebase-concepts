@@ -1,15 +1,19 @@
 import { createStore } from "vuex";
 
 import {auth} from "../firebase/firebaseConfig";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 const store = createStore({
     state: {
-        user: null
+        user: null,
+        authIsReady: false
     },
     mutations: {
         setUser(state, payload) {
             state.user = payload;
+        },
+        setAuthIsReady(state, payload) {
+            state.authIsReady = payload;
         }
     },
     actions: {
@@ -29,8 +33,15 @@ const store = createStore({
             if (!res) throw new Error("Failed to signup");
 
             context.commit("setUser", res.user);
-        }
+        },
     }
 });
+
+const unsubAuthChange = onAuthStateChanged(auth, (user) => {
+    store.commit("setAuthIsReady", true);
+    store.commit("setUser", user);
+    unsubAuthChange();
+});
+
 
 export default store;

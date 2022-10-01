@@ -17,7 +17,8 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import {useStore} from "vuex";
 
 export default {
   setup() {
@@ -26,20 +27,31 @@ export default {
       { title: '...Then I Took an Arrow in the Knee', id: 2 },
       { title: 'Mario vs Luigi, Ultimate Showdown', id: 3 },
     ])
+    const store = useStore();
+
+    let title = computed(() => {
+      return store.state.compositionApiData.title;
+    })
+
+    const updateTitle = () => {
+      store.commit("updateTitleComp", "My new title but COMPOSED");
+    }
 
     return { 
-      blogs
+      blogs,
+      title,
+      updateTitle
     }
   },
   methods: {
-    updateTitle() {
+    /*updateTitle() {
       this.$store.commit("updateTitle", "My new title");//mutation name to be commited, new data
-    }
+    }*/
   },
   computed: {
-    title() {
-      return this.$store.state.optionalApiData.title;
-    }
+    /*title() {
+      return this.$store.state.optionsApiDAta.title;
+    }*/
   }
 
 }

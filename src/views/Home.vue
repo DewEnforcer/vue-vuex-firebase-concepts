@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import {computed, ref} from 'vue'
-import {useStore} from "vuex";
+import {ref} from 'vue'
+import {getUser} from "../composables/getUser";
 
 export default {
   setup() {
@@ -25,11 +25,8 @@ export default {
       { title: '...Then I Took an Arrow in the Knee', id: 2 },
       { title: 'Mario vs Luigi, Ultimate Showdown', id: 3 },
     ])
-    const store = useStore();
 
-    const user = computed(() => {
-      return store.state.user;
-    })
+    const user = getUser();
 
     return { 
       blogs,

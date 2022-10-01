@@ -1,21 +1,28 @@
 import { createStore } from "vuex";
 
+import {auth} from "../firebase/firebaseConfig";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+
 const store = createStore({
     state: {
-        optionsApiDAta: {
-            title: "Hello world OPT"
-        },
-        compositionApiData: {
-            title: "Hello world CMPSD"
-        },
+        user: null
     },
     mutations: {
-        updateTitle(state, payload) {
-            state.optionsApiDAta.title = payload;
+        setUser(state, payload) {
+            state.user = payload;
+        }
+    },
+    actions: {
+        async login() {
+
         },
-        updateTitleComp(state, payload) {
-            state.compositionApiData.title = payload;
-        },
+        async signup(context, {email, password}) {
+
+            const res = await createUserWithEmailAndPassword(auth, email, password);
+            if (!res) throw new Error("Failed to login");
+
+            context.commit("setUser", res.user);
+        }
     }
 });
 
